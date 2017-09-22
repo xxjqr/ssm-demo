@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<script type="text/javascript" src="/js/jquery-3.1.1.min.js"></script>
+<script type="text/javascript" src="/js/jqPaginator.js"></script>
+<!-- <link rel="stylesheet" type="text/css" href="/static/style.css" /> -->
+<link rel="stylesheet" type="text/css" href="/static/bootstrap.css" />
+<style type="text/css">
+    #content {
+        width: 900px;
+        margin: 10px auto;
+    }
+</style>
+</head>
+
+<body>
+	
+	<!-- 内容 -->
+	<div id="content">
+		<!-- 搜索 -->
+		<div id="search" style="margin-bottom:20px;">
+			<label class="control-label" for="brand_search">商品名：</label>
+			<input class="form-control" type="text" id="brand_search" style="width:300px;height:30px;display:inline;">
+			
+			<select class="form-control" name="brands" style="width:150px;height:30px;display:inline;" onChange="searchProduct()">
+				<option value="">请选择品牌</option>
+			</select>
+			
+			<button type="button" class="btn btn-primary btn-sm" onClick="searchProduct()">查询</button>
+			<button type="button" class="btn btn-primary btn-sm" style="float:right;" onClick="addProduct()">添加商品</button>
+			<button type="button" class="btn btn-primary btn-sm" style="float:right;margin-right:20px;height:30px;" onClick="deleteAll()">批量删除</button>
+		</div>
+		
+		<!-- 商品展示 -->
+		<div id="goods_table">
+			<table class="table table-bordered">
+				<thead>
+					<tr>
+						<th><input id="selectAll" type="checkbox" onClick="selectAllClick()" class="checkbox"></th>
+						<th>商品编号</th>
+						<th>商品名称</th>
+						<th>商品描述</th>
+						<th>品牌</th>
+						<th>库存</th>
+						<th>销量</th>
+						<th>是否上架</th>
+						<th>操作</th>
+					</tr>
+				</thead>
+				
+				<tbody id="product_table">				
+				</tbody>
+			</table>
+		</div>
+
+		<!-- 分页器 -->
+		<div>
+			<ul class="pagination" id="pagination"></ul>
+<!-- 			<button onClick="test()" style="float:right">测试</button> -->
+		</div>
+		
+	</div>
+
+	<script text="text/javascript">
+		//批量删除
+		function deleteAll(){
+			$("#selectAll").prop("checked",false);
+			$(".proCB").each(function(i,item){
+				if ($(item).prop("checked") == true){
+					del($(item).attr("data-id"));
+				}
+			});
+		}
+	
+		//checkBox单个选中
+		function cbClick(){
+			var total = $(".proCB").length;
+			var sel = 0;
+			var desel = 0;
+			$(".proCB").each(function(i,item){
+				if ($(item).prop("checked") == true)
+					sel=sel+1;
+				else
+					desel = desel+1;
+			});
+			
+			if (sel == total)
+				$("#selectAll").prop("checked",true);
+			if (desel == total)
+				$("#selectAll").prop("checked",false);
+		}
+		
+	    //全选按钮点击
+		function selectAllClick(){
+			if ($("#selectAll").is(':checked') == true){
+				$(".proCB").each(function(i,item){
+					$(item).prop("checked",true);
+				});
+			}else{
+				$(".proCB").each(function(i,item){
+					$(item).prop("checked",false);
+				});
+			}
+		}
+		
+	
+		//搜索参数
+		var productName = "";
+		var brand = "";
+		var pageNo = 1;//当前页号
+	
+		//配置搜索商品的参数
+		function configParam(){
+			//设置搜索的商品名称
+			productName = sessionStorage.getItem("productName");
+			if(productName==null){
+				productName=$("#brand_search").val();
+			}else{
+				$("#brand_search").val(productName);
+			}
+			
+			
+			//设置搜索的品牌
+ 			brand = sessionStorage.getItem("brand");
+ 			if (brand!=null && brand!="请选择品牌"){
+ 				$("select[name='brands'] option").each(function(){
+ 					if($(this).text() == brand){
+ 						$(this).attr("selected","selected");
+ 					}
+ 				});
+ 			}else{
+ 				brand = $("select[name='brands'] option:selected").text();
+ 				brand = (brand=="请选择品牌"?"":brand);
+ 			}
+ 			
+ 			//设置搜索的当前页
+			var tempPageNo = 1;
+			tempPageNo = sessionStorage.getItem("pageNo");
+			if(tempPageNo!=null){
+				pageNo=tempPageNo;
+			}
+			/*注意这里不能覆盖pageNo，当sesssion中不存在pageNo时还是使用原来的pageNo*/
+		}
+		
+		//搜索商品
+		function searchProduct(){
+			//配置查询参数
+			configParam();
+                	
+        	sessionStorage.clear();
+        	
+        	$.ajax({
+        		url : "http://localhost:8080/products?productName="+productName+"&brand="+brand+"&pageNo="+pageNo,
+                dataType : "json",
+                type:'get',
+                success : function(data){
+					//动态设置分页参数
+                	$("#pagination").jqPaginator('option', {
+                			totalPages:data.query.pageCount,
+                			visiblePages:(10>data.query.pageCount?data.query.pageCount:10),
+                            currentPage: data.query.pageNo
+                        });
+					
+					//修改当前页号(后台处理的当前页可能和查询的当前页不一样)
+                	pageNo = data.query.pageNo;
+					
+					//先清空数据
+                	$("#product_table").empty();
+                	
+					//遍历数据
+                	jQuery.each(data.products, function(i,product){     
+                		var tr=$("<tr></tr>");
+                		tr.append("<td><input onClick='cbClick()' data-id="+product.id+" class='checkbox proCB' type='checkbox'></td>");
+                		tr.append("<td>"+product.num+"</td>");
+                		tr.append("<td>"+product.name+"</td>");
+                		tr.append("<td>"+product.description+"</td>");
+                		tr.append("<td>"+product.brand+"</td>");
+                		tr.append("<td>"+product.stock+"</td>");
+                		tr.append("<td>"+product.sale+"</td>");
+                		tr.append("<td>"+(product.online>0?'是':'否')+"</td>");
+                		tr.append("<td><a href='javascript:void(0)' onClick='del("+product.id+")'>删除</a> | <a href='javascript:void(0)' onClick='edit("+product.id+")'>编辑</a></td>");
+
+                		$("#product_table").append(tr);
+                		
+                    });
+                }
+        	});
+		}
+        
+        //分页器参数
+        var pageParam={
+                totalPages: 1,
+                visiblePages: 1,
+                currentPage: 1,
+                onPageChange: function (curPageNo, type) { //可获取的type值有：init change
+                	if(type == "change"){
+						pageNo=curPageNo;
+                    	searchProduct();
+                	}
+                }
+            }
+        
+        
+        //删除商品函数
+        function del(productId){
+    		$.ajax({
+    			url : "http://localhost:8080/product/"+productId,
+    			type:'delete',
+    			success : function(data){
+    				if(data >=1 ) //data是数据库受影响信息条数，>1表示删除成功
+    					searchProduct();
+    				else
+    					alert("删除失败");
+    			}
+    		});
+    	}
+        /*删除为什么不需要存储查询信息呢？
+                                 因为删除是在当页进行，没有跳转页面*/
+        
+       
+        //编辑商品函数
+        function edit(productId){
+        	sessionStorage.setItem("pageNo",pageNo);
+        	sessionStorage.setItem("brand",brand);
+        	sessionStorage.setItem("productName",productName);
+        	sessionStorage.setItem("productId",productId);
+        	window.location="http://localhost:8080/edit.html";
+        }
+        
+        //点击添加商品
+        function addProduct(){
+        	window.location="http://localhost:8080/add.html";
+        }
+        
+        //获取所有品牌
+        function getBrands(){
+        	//先从session取
+//         	var brands = JSON.parse(sessionStorage.getItem("brands"));
+//         	if(brands !=null){
+//         		alert("session中取");
+//         		jQuery.each(brands, function(i,item){     
+//                 	$("select[name='brands']").append("<option value='"+item.id+"'>"+item.name+"</option>");
+//                 }); 
+//         	}else{
+        		$.get({
+                    url : "http://localhost:8080/brands",
+                    dataType : "json",
+                    async: false,
+                    success : function(data){
+                        jQuery.each(data, function(i,item){     
+                        	$("select[name='brands']").append("<option value='"+item.id+"'>"+item.name+"</option>");
+                        });
+                    }
+        	    });
+//         	}
+        	
+        }
+       
+        
+        //jq初始方法
+        $(function(){
+        	//获取所有品牌
+            getBrands();
+        	
+          	//设置分页器
+            $.jqPaginator('#pagination', pageParam);
+        	
+        	//首次获取分页数据
+            searchProduct();
+        });
+    </script>
+</body>
+
+</html>

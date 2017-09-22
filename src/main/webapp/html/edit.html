@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="UTF-8">
+<title>Document</title>
+<script type="text/javascript" src="/js/jquery-3.1.1.min.js"></script>
+
+<link rel="stylesheet" type="text/css" href="/static/bootstrap.css" />
+<style type="text/css">
+#content {
+	width: 500px;
+	margin: 20px;
+}
+</style>
+</head>
+
+<body>
+
+	<!-- 内容 -->
+	<div id="content">
+		<form id="form" class="form-horizontal" role="form">
+			<input name="id" type="hidden" class="form-control" id="product_id">
+		
+			<div class="form-group">
+				<label for="product_num" class="col-sm-2 control-label">商品编号</label>
+				<div class="col-sm-10">
+					<input name="num" type="text" class="form-control" id="product_num">
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="product_name" class="col-sm-2 control-label">商品名称</label>
+				<div class="col-sm-10">
+					<input name="name" type="text" class="form-control" id="product_name">
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="product_name" class="col-sm-2 control-label">商品描述</label>
+				<div class="col-sm-10">
+					<input name="description" type="text" class="form-control" id="product_description">
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="product_brand" class="col-sm-2 control-label">商品品牌</label>
+				<div class="col-sm-10">
+					<select class="form-control" name="brandID" id="product_brand">
+					</select>
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="product_stock" class="col-sm-2 control-label">商品库存</label>
+				<div class="col-sm-10">
+					<input name="stock" type="text" class="form-control" id="product_stock">
+				</div>
+			</div>
+		
+			<div class="form-group">
+				<label for="product_sale" class="col-sm-2 control-label">商品销量</label>
+				<div class="col-sm-10">
+					<input name="sale" type="text" class="form-control" id="product_sale">
+				</div>
+			</div>
+			
+			<div class="form-group">
+				<label for="product_online" class="col-sm-2 control-label">是否上架</label>
+				<div class="col-sm-10">
+					<select name="online" class="form-control" id="product_online">
+						<option value="1">上架</option>
+						<option value="0">下架</option>
+					</select>
+				</div>
+			</div>
+		</form>
+		
+		<button type="submit" class="btn btn-default" onClick="submit()">提交</button>
+		</script>
+		
+		<script type="text/javascript">
+			//获取品牌函数参数
+			var brandsOpts = {
+	            url : "/brands",
+	            dataType : "json",
+	            success : function(data){
+	                jQuery.each(data, function(i,item){
+	                	$("#product_brand").append("<option value='"+item.id+"'>"+item.name+"</option>");
+	                });  
+	            }
+		    };
+		
+			$(function(){
+				//获取所有品牌数据
+		        $.get(brandsOpts);
+				
+				//把获取的product赋值给各个元素
+				assignData();
+			});
+			
+			
+			//赋值数据 
+			function assignData(){
+				var productId = sessionStorage.getItem("productId");
+				$.ajax({
+	    			url : "http://localhost:8080/product/"+productId,
+	    			type:'get',
+	    			success : function(product){
+	    				console.log("id:"+product.brandID);
+	    				$("#product_id").val(product.id);
+	    				$("#product_num").val(product.num);
+	    				$("#product_name").val(product.name);
+	    				$("#product_description").val(product.description);
+	    				$("#product_brand").val(product.brandID);
+	    				$("#product_stock").val(product.stock);
+	    				$("#product_sale").val(product.sale);
+	    				$("#product_online").val(product.online);
+	    			}
+	    		});
+			}
+			
+			function submit(){
+				$.ajax({
+	    			url : "http://localhost:8080/product",
+	    			type:'PUT',
+	    			dataType: "json",
+	    			data:$('#form').serializeArray(),
+	    			success : function(data){
+	    				if(data>=1){
+	    					//页面跳转
+	    					window.location="http://localhost:8080/";
+	    				}
+	    			}
+	    		});
+			}
+		</script>
+</body>
+
+</html>
