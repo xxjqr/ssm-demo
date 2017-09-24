@@ -1,14 +1,14 @@
-package com.xxjqr.ssm_demo_mx.controller;
+package com.xxjqr.ssm_demo.controller;
 
 
-import com.xxjqr.ssm_demo_mx.comm.po.Pager;
-import com.xxjqr.ssm_demo_mx.pojo.ProductCond;
+import com.xxjqr.ssm_demo.comm.po.Pager;
+import com.xxjqr.ssm_demo.pojo.ProductCond;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import com.xxjqr.ssm_demo_mx.service.ProductService;
+import com.xxjqr.ssm_demo.service.ProductService;
 
 @Controller
 @RequestMapping("rest")

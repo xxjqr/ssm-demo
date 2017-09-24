@@ -1,4 +1,4 @@
-package com.xxjqr.ssm_demo_mx.comm.util;
+package com.xxjqr.ssm_demo.comm.util;
 
 import java.util.List;
 

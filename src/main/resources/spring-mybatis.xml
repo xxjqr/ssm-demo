@@ -14,7 +14,7 @@
 
 
 	<!-- 开启包扫描 -->
-	<context:component-scan base-package="com.xxjqr.ssm_demo_mx"></context:component-scan>
+	<context:component-scan base-package="com.xxjqr.ssm_demo"></context:component-scan>
     
     <!-- 数据库连接池 -->
 	<!-- 加载配置文件 -->
@@ -42,7 +42,7 @@
 						<!--使用下面的方式配置参数，一行配置一个 -->
 						<value>
 							helperDialect=mysql
-							reasonable=true
+							<!-- reasonable=true -->
 						</value>
 					</property>
 				</bean>
@@ -55,7 +55,7 @@
 	
 	<!-- 配置扫描包，加载mapper代理对象 -->
 	<bean class="org.mybatis.spring.mapper.MapperScannerConfigurer">
-		<property name="basePackage" value="com.xxjqr.ssm_demo_mx.mapper"></property>
+		<property name="basePackage" value="com.xxjqr.ssm_demo.mapper"></property>
 	</bean>
     
     <!-- 事务管理 -->

@@ -1,4 +1,4 @@
-package com.xxjqr.ssm_demo_mx.pojo;
+package com.xxjqr.ssm_demo.pojo;
 
 import lombok.Data;
 

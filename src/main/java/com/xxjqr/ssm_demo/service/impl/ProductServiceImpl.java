@@ -1,13 +1,13 @@
-package com.xxjqr.ssm_demo_mx.service.impl;
+package com.xxjqr.ssm_demo.service.impl;
 
 
 
-import com.xxjqr.ssm_demo_mx.comm.po.Pager;
-import com.xxjqr.ssm_demo_mx.comm.util.PagerUtil;
-import com.xxjqr.ssm_demo_mx.pojo.ProductCond;
+import com.xxjqr.ssm_demo.comm.po.Pager;
+import com.xxjqr.ssm_demo.comm.util.PagerUtil;
+import com.xxjqr.ssm_demo.pojo.ProductCond;
 import org.springframework.stereotype.Service;
-import com.xxjqr.ssm_demo_mx.mapper.ProductMapper;
-import com.xxjqr.ssm_demo_mx.service.ProductService;
+import com.xxjqr.ssm_demo.mapper.ProductMapper;
+import com.xxjqr.ssm_demo.service.ProductService;
 
 import javax.annotation.Resource;
 

@@ -1,9 +1,9 @@
-package com.xxjqr.ssm_demo_mx.comm.util;
+package com.xxjqr.ssm_demo.comm.util;
 
 import com.github.pagehelper.ISelect;
 import com.github.pagehelper.PageHelper;
 import com.github.pagehelper.PageInfo;
-import com.xxjqr.ssm_demo_mx.comm.po.Pager;
+import com.xxjqr.ssm_demo.comm.po.Pager;
 import org.springframework.web.context.request.RequestContextHolder;
 import org.springframework.web.context.request.ServletRequestAttributes;
 

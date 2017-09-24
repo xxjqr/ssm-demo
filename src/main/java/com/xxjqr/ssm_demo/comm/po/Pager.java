@@ -1,4 +1,4 @@
-package com.xxjqr.ssm_demo_mx.comm.po;
+package com.xxjqr.ssm_demo.comm.po;
 
 import java.io.Serializable;
 import java.util.List;

@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.xxjqr.ssm_demo_mx.mapper.BrandMapper"> <!-- 这里一定要是全路径名哦 -->
+<mapper namespace="com.xxjqr.ssm_demo.mapper.BrandMapper"> <!-- 这里一定要是全路径名哦 -->
 
-	<select id="getBrands" resultType="com.xxjqr.ssm_demo_mx.pojo.Brand">
+	<select id="getBrands" resultType="com.xxjqr.ssm_demo.pojo.Brand">
 		select * from t_brand;
 	</select>
 

@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.xxjqr.ssm_demo_mx.mapper.ProductMapper"> <!-- 这里一定要是全路径名哦 -->
+<mapper namespace="com.xxjqr.ssm_demo.mapper.ProductMapper"> <!-- 这里一定要是全路径名哦 -->
 	
 	<!--&lt;!&ndash; 获取所有商品 &ndash;&gt;-->
-	<!--<select id="getProductsWithQuery" parameterType="com.xxjqr.ssm_demo_mx.pojo.ProductQuery" resultType="com.xxjqr.ssm_demo_mx.pojo.Product" resultMap="product">-->
+	<!--<select id="getProductsWithQuery" parameterTycom.xxjqr.ssm_demox.pojo.ProductQuery" resultTycom.xxjqr.ssm_demox.pojo.Product" resultMap="product">-->
 		<!--SELECT p.id,p.num,p.brand_id,p.name,p.description,p.stock,p.sale,p.online,b.name as brand from products p LEFT JOIN brands b on p.brand_id = b.id-->
 		<!--<where>-->
 			<!--<if test="brand != null">-->
@@ -19,7 +19,7 @@
 	<!---->
 	<!---->
 	<!--&lt;!&ndash; 获取信息总条数 &ndash;&gt;-->
-	<!--<select id="getCountByQuery" resultType="Integer" parameterType="com.xxjqr.ssm_demo_mx.pojo.ProductQuery">-->
+	<!--<select id="getCountByQuery" resultType="Integer" parameterTycom.xxjqr.ssm_demox.pojo.ProductQuery">-->
 		<!--select count(1) from products-->
 		<!--<where>-->
 			<!--<if test="brand != null">-->
@@ -38,21 +38,21 @@
 	<!--</delete>-->
 	<!---->
 	<!--&lt;!&ndash; 根据id获取商品  &ndash;&gt;-->
-	<!--<select id="getProductById" parameterType="Integer" resultType="com.xxjqr.ssm_demo_mx.pojo.Product" resultMap="product">-->
+	<!--<select id="getProductById" parameterType="Integer" resultTycom.xxjqr.ssm_demox.pojo.Product" resultMap="product">-->
 		<!--SELECT p.id,p.brand_id,p.num,p.name,p.description,p.stock,p.sale,p.online,b.name as brand from products p LEFT JOIN brands b on p.brand_id = b.id where p.id = #{id};-->
 	<!--</select>-->
 	<!---->
 	<!--&lt;!&ndash; 根据id更新商品 &ndash;&gt;-->
-	<!--<update id="updateProduct" parameterType="com.xxjqr.ssm_demo_mx.pojo.Product">-->
+	<!--<update id="updateProduct" parameterTycom.xxjqr.ssm_demox.pojo.Product">-->
 		<!--update products set name=#{name},num=#{num},description=#{description},brand_id=#{brandID},stock=#{stock},sale=#{sale},online=#{online} where id=#{id};-->
 	<!--</update>-->
 
 
-	<resultMap id="product_ref" type="com.xxjqr.ssm_demo_mx.pojo.Product">
+	<resultMap id="product_ref" type="com.xxjqr.ssm_demo.pojo.Product">
 		<result column="brand_id" property="brandId"/>
 	</resultMap>
 
-	<select id="selectByCond" parameterType="com.xxjqr.ssm_demo_mx.pojo.ProductCond" resultMap="product_ref">
+	<select id="selectByCond" parameterType="com.xxjqr.ssm_demo.pojo.ProductCond" resultMap="product_ref">
 		select * from t_product
 		<!--<where>-->
 			<!--<if test="keyword!=null and keyword!=">-->
